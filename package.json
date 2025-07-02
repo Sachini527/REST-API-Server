@@ -16,5 +16,8 @@
     "url": "https://github.com/Sachini527/REST-API-Server/issues"
   },
   "homepage": "https://github.com/Sachini527/REST-API-Server#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
