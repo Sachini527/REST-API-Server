@@ -2,6 +2,10 @@
 const express = require('express');
 const app = express();
 
+// adding a middleware function to parse incoming JSON requests
+// express.json methos returns a piece of middleware, and then we call app.use to use that middleware in the request processing pipeline
+app.use(express.json());
+
 const courses = [
     { id: 1, name: 'course1' },
     { id: 2, name: 'course2' },
@@ -14,6 +18,20 @@ app.get('/', (req, res) => {
 
 app.get('/api/courses', (req, res) => {
     res.send(courses);
+});
+
+// Handling HTTP POST Requests
+// In the path we put 'courses' because we are going to post to the collection of courses
+// route handler - (req, res) => { ... }
+// create a new course object & add it to the course array
+app.post('/api/courses', (req, res) => {
+    const course = {
+        id: courses.length + 1,
+        name: req.body.name
+    };
+    courses.push(course);
+    // we send the newly created course object back to the client
+    res.send(course);
 });
 
 // Route Parameters
