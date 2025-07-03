@@ -42,7 +42,7 @@ app.post('/api/courses', (req, res) => {
     //    return;
     //}
     if (result.error) {
-        res.status(400).send(result.error);
+        res.status(400).send(result.error.details[0].message);
         return;
     }
 
