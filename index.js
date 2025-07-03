@@ -91,7 +91,6 @@ function validateCourse(course) {
 
 
 // Route Parameters
-
 //app.get('/api/posts/:year/:month', (req, res) => {
 //    res.send(req.params);
 //});
@@ -113,9 +112,19 @@ app.get('/api/courses/:id', (req, res) => {
 
 
 // Handling HTTP DELETE Requests
+app.delete('/api/courses/:id', (req, res) => {
+    // Look up the course, If not existing, return 404
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) res.status(404).send('The course with the given ID was not found.');
 
+    // Delete
+    // find the index of the course in the courses array and remove it
+    const index = courses.indexOf(course);
+    courses.splice(index, 1);
 
-
+    //  Return the same course
+    res.send(course);
+});
 
 // This is a middleware function that parses incoming JSON requests
 // assign a port to the node application, the system attempt to read the value of a environmental variable call port, if there is a value we can use that, otherwise we can use a arbitrary number for your developer machine
