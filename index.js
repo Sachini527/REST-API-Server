@@ -30,11 +30,11 @@ app.get('/api/courses', (req, res) => {
 // create a new course object & add it to the course array
 app.post('/api/courses', (req, res) => {
     // schema is simply means a structure of the object that we expect to receive
-    const schema = {
-        name: Joi.string().min(3).required()
-    };
-
-    const result = Joi.validate(req.body, schema);
+    const { error } = validateCourse(req.body); // result.error
+    if (error) {
+        res.status(400).send(error.details[0].message);
+        return;
+    }
     // console.log(result);
 
 
@@ -45,10 +45,6 @@ app.post('/api/courses', (req, res) => {
     //    res.status(400).send('Name is required and should be minimum 3 characters.');
     //    return;
     //}
-    if (result.error) {
-        res.status(400).send(result.error.details[0].message);
-        return;
-    }
 
     const course = {
         id: courses.length + 1,
@@ -65,26 +61,32 @@ app.post('/api/courses', (req, res) => {
 
 // Look up the course
 // If not existing, return 404
-const course = courses.find(c => c.id === parseInt(req.params.id));
-if (!course) res.status(404).send('The course with the given ID was not found.');
+app.put('/api/courses/:id', (req, res) => {
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) res.status(404).send('The course with the given ID was not found.');
 
-// Validate
-// If invalid, return 404 - Bad Request
-const schema = {
-    name: Joi.string().min(3).required()
-};
-// Validate the request body against the schema
-const result = Joi.validate(req.body, schema);
-
-if (result.error) {
-        res.status(400).send(result.error.details[0].message);
+    // Validate
+    // If invalid, return 404 - Bad Request
+    const { error } = validateCourse(req.body); // result.error
+    if (error) {
+        res.status(400).send(error.details[0].message);
         return;
     }
+    // Update course
+    course.name = req.body.name;
+    // Return the updated course to the client
+    res.send(course);
+});
 
-// Update course
-course.name = req.body.name;
-// Return the updated course to the client
-res.send(course);
+
+// All the validation logic is moved to a separate function
+function validateCourse(course) {
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+    // validate the course object against the schema and return the result
+    return Joi.validate(course, schema);
+}
 
 
 
@@ -107,6 +109,12 @@ app.get('/api/courses/:id', (req, res) => {
     if (!course) res.status(404).send('The course with the given ID was not found.');
     res.send(course);
 });
+
+
+
+// Handling HTTP DELETE Requests
+
+
 
 
 // This is a middleware function that parses incoming JSON requests
