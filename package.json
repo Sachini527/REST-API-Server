@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Sachini527/REST-API-Server#readme",
   "description": "",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "joi": "^13.1.0"
   }
 }
