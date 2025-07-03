@@ -22,6 +22,8 @@ app.get('/api/courses', (req, res) => {
     res.send(courses);
 });
 
+
+
 // Handling HTTP POST Requests
 // In the path we put 'courses' because we are going to post to the collection of courses
 // route handler - (req, res) => { ... }
@@ -34,6 +36,8 @@ app.post('/api/courses', (req, res) => {
 
     const result = Joi.validate(req.body, schema);
     // console.log(result);
+
+
 
     // Input Validation
     //if (!req.body.name || req.body.name.length < 3) {
@@ -55,7 +59,37 @@ app.post('/api/courses', (req, res) => {
     res.send(course);
 });
 
+
+
+// Handling HTTP PUT Requests
+
+// Look up the course
+// If not existing, return 404
+const course = courses.find(c => c.id === parseInt(req.params.id));
+if (!course) res.status(404).send('The course with the given ID was not found.');
+
+// Validate
+// If invalid, return 404 - Bad Request
+const schema = {
+    name: Joi.string().min(3).required()
+};
+// Validate the request body against the schema
+const result = Joi.validate(req.body, schema);
+
+if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+        return;
+    }
+
+// Update course
+course.name = req.body.name;
+// Return the updated course to the client
+res.send(course);
+
+
+
 // Route Parameters
+
 //app.get('/api/posts/:year/:month', (req, res) => {
 //    res.send(req.params);
 //});
@@ -65,6 +99,7 @@ app.post('/api/courses', (req, res) => {
 //    res.send(req.query);
 //});
 
+
 // Handling HTTP GET Requests
 // to get a specific course by its ID
 app.get('/api/courses/:id', (req, res) => {
@@ -72,6 +107,7 @@ app.get('/api/courses/:id', (req, res) => {
     if (!course) res.status(404).send('The course with the given ID was not found.');
     res.send(course);
 });
+
 
 // This is a middleware function that parses incoming JSON requests
 // assign a port to the node application, the system attempt to read the value of a environmental variable call port, if there is a value we can use that, otherwise we can use a arbitrary number for your developer machine
