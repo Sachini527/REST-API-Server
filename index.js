@@ -1,3 +1,5 @@
+// Joi is a validation library for JavaScript objects
+const Joi = require('joi');
 // load the require function, called that 'express'
 const express = require('express');
 const app = express();
@@ -25,12 +27,25 @@ app.get('/api/courses', (req, res) => {
 // route handler - (req, res) => { ... }
 // create a new course object & add it to the course array
 app.post('/api/courses', (req, res) => {
+    // schema is simply means a structure of the object that we expect to receive
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+
+    const result = Joi.validate(req.body, schema);
+    // console.log(result);
+
     // Input Validation
-    if (!req.body.name || req.body.name.length < 3) {
-        // 400 Bad Request
-        res.status(400).send('Name is required and should be minimum 3 characters.');
+    //if (!req.body.name || req.body.name.length < 3) {
+    // 400 Bad Request
+    //    res.status(400).send('Name is required and should be minimum 3 characters.');
+    //    return;
+    //}
+    if (result.error) {
+        res.status(400).send(result.error);
         return;
     }
+
     const course = {
         id: courses.length + 1,
         name: req.body.name
