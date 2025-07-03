@@ -4,7 +4,7 @@ const app = express();
 
 // This is a middleware function that parses incoming JSON requests
 app.get('/', (req, res) => {
-    res.send('Hello World!!!');
+    res.send('Hello World');
 });
 
 app.get('/api/courses', (req, res) => {
@@ -12,8 +12,8 @@ app.get('/api/courses', (req, res) => {
 });
 
 // Route Parameters
-app.get('/api/courses/:id', (req, res) => {
-    res.send(req.params.id);
+app.get('/api/posts/:year/:month', (req, res) => {
+    res.send(req.params);
 });
 
 // This is a middleware function that parses incoming JSON requests
