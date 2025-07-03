@@ -25,6 +25,12 @@ app.get('/api/courses', (req, res) => {
 // route handler - (req, res) => { ... }
 // create a new course object & add it to the course array
 app.post('/api/courses', (req, res) => {
+    // Input Validation
+    if (!req.body.name || req.body.name.length < 3) {
+        // 400 Bad Request
+        res.status(400).send('Name is required and should be minimum 3 characters.');
+        return;
+    }
     const course = {
         id: courses.length + 1,
         name: req.body.name
