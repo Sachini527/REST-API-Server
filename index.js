@@ -12,8 +12,13 @@ app.get('/api/courses', (req, res) => {
 });
 
 // Route Parameters
+//app.get('/api/posts/:year/:month', (req, res) => {
+//    res.send(req.params);
+//});
+
+// query string parameters
 app.get('/api/posts/:year/:month', (req, res) => {
-    res.send(req.params);
+    res.send(req.query);
 });
 
 // This is a middleware function that parses incoming JSON requests
