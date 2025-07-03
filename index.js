@@ -31,12 +31,8 @@ app.get('/api/courses', (req, res) => {
 app.post('/api/courses', (req, res) => {
     // schema is simply means a structure of the object that we expect to receive
     const { error } = validateCourse(req.body); // result.error
-    if (error) {
-        res.status(400).send(error.details[0].message);
-        return;
-    }
+    if (error) return res.status(400).send(error.details[0].message);
     // console.log(result);
-
 
 
     // Input Validation
@@ -63,15 +59,12 @@ app.post('/api/courses', (req, res) => {
 // If not existing, return 404
 app.put('/api/courses/:id', (req, res) => {
     const course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) res.status(404).send('The course with the given ID was not found.');
+    if (!course) return res.status(404).send('The course with the given ID was not found.');
 
     // Validate the course name
     const { error } = validateCourse(req.body); // result.error
-    if (error) {
-        res.status(400).send(error.details[0].message);
-        return;
-    }
-    
+    if (error) return res.status(400).send(error.details[0].message);
+
     // Update course
     course.name = req.body.name;
     // Return the updated course to the client
@@ -105,7 +98,7 @@ function validateCourse(course) {
 // to get a specific course by its ID
 app.get('/api/courses/:id', (req, res) => {
     const course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) res.status(404).send('The course with the given ID was not found.');
+    if (!course) return res.status(404).send('The course with the given ID was not found.');
     res.send(course);
 });
 
@@ -115,7 +108,7 @@ app.get('/api/courses/:id', (req, res) => {
 app.delete('/api/courses/:id', (req, res) => {
     // Look up the course, If not existing, return 404
     const course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) res.status(404).send('The course with the given ID was not found.');
+    if (!course) return res.status(404).send('The course with the given ID was not found.');
 
     // Delete
     // find the index of the course in the courses array and remove it
