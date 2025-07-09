@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+rest-api-server:
+build: .
+ports:
+  - "3000:3000"
+environment:
+  - NODE_ENV = production
+  - PORT = 3000
+container_name: rest-api-server
+restart: unless-stopped
