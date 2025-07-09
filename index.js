@@ -67,7 +67,7 @@ app.put('/api/courses/:id', (req, res) => {
 
     // Update course
     course.name = req.body.name;
-    // Return the updated course to the client
+    // Return the updated course to the client#
     res.send(course);
 });
 
